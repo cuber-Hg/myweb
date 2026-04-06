@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes">
+    <title>汞粗汽个人主页 |</title>
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            /* 高品质背景图片（科技感抽象线条）适合横竖屏，且不丢失主体 */
+            background-image: url('https://tse2-mm.cn.bing.net/th/id/OIP-C.93DjTJcsWU11Cu8QW_0NhwHaEK?w=166&h=93&c=7&r=0&o=7&dpr=2&pid=1.7&rm=3');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center center;
+            background-repeat: no-repeat;
+            color: #1e293b;
+            line-height: 1.5;
+            padding: 24px 32px;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        /* 半透明叠加层，增加玻璃卡片通透感 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 20, 40, 0.2);
+            backdrop-filter: blur(1px);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* 主容器 */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            border-radius: 2rem;
+            overflow: visible;
+            transition: all 0.2s;
+        }
+
+        /* ========= 页眉玻璃效果 ========= */
+        .header {
+            padding: 24px 28px 20px 28px;
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 2rem 2rem 0 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+        }
+
+        .profile-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .avatar {
+            width: 76px;
+            height: 76px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            background: #eef2ff;
+            transition: transform 0.2s ease;
+        }
+
+        .avatar:hover {
+            transform: scale(1.02);
+        }
+
+        .profile-text {
+            flex: 1;
+        }
+
+        .greeting {
+            font-size: 1.7rem;
+            font-weight: 600;
+            color: #0f172a;
+            letter-spacing: -0.3px;
+            text-shadow: 0 1px 0 rgba(255,255,255,0.5);
+        }
+
+        .nickname {
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            font-weight: 700;
+        }
+
+        .motto {
+            font-size: 0.95rem;
+            color: #1e293b;
+            margin-top: 6px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255,255,240,0.5);
+            backdrop-filter: blur(2px);
+            padding: 4px 12px;
+            border-radius: 40px;
+            width: fit-content;
+        }
+
+        .motto i {
+            color: #f59e0b;
+            font-size: 0.85rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 20px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .social-links a {
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(4px);
+            padding: 5px 16px;
+            border-radius: 40px;
+            transition: all 0.2s;
+            color: #0f172a;
+            border: 1px solid rgba(255,255,255,0.6);
+        }
+
+        .social-links a.github-link:hover {
+            background: #1e293b;
+            color: white;
+            transform: translateY(-2px);
+            border-color: transparent;
+        }
+
+        .social-links a.bilibili-link:hover {
+            background: #fb7299;
+            color: white;
+            transform: translateY(-2px);
+            border-color: transparent;
+        }
+
+        /* 主内容区 2:8 布局 (默认桌面/平板横屏大屏) */
+        .main-content {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .left-column {
+            width: 25%;
+            padding: 28px 20px 32px 24px;
+        }
+
+        .right-column {
+            width: 75%;
+            padding: 28px 32px 32px 20px;
+        }
+
+        /* ========= 玻璃卡片公用样式 ========= */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.72);
+            backdrop-filter: blur(12px);
+            border-radius: 28px;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 12px 28px -8px rgba(0, 0, 0, 0.12);
+            transition: all 0.25s ease;
+        }
+
+        /* 左侧每个独立块卡片 */
+        .left-column .info-section {
+            background: rgba(255, 255, 255, 0.72);
+            backdrop-filter: blur(12px);
+            border-radius: 28px;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            padding: 18px 20px;
+            margin-bottom: 24px;
+            transition: all 0.25s ease;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .left-column .info-section:hover {
+            background: rgba(255, 255, 255, 0.82);
+            transform: translateY(-2px);
+            border-color: rgba(255, 255, 255, 0.9);
+        }
+
+        .right-column .dynamics-wrapper {
+            background: rgba(255, 255, 255, 0.72);
+            backdrop-filter: blur(12px);
+            border-radius: 28px;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            padding: 24px 26px;
+            transition: all 0.25s ease;
+            box-shadow: 0 12px 28px -8px rgba(0, 0, 0, 0.1);
+        }
+
+        .right-column .dynamics-wrapper:hover {
+            background: rgba(255, 255, 255, 0.82);
+            transform: translateY(-2px);
+        }
+
+        .info-section h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #0f172a;
+            border-left: 4px solid #3b82f6;
+            padding-left: 14px;
+            letter-spacing: -0.2px;
+        }
+
+        .info-section h3 i {
+            color: #3b82f6;
+            font-size: 1.2rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 14px;
+            font-size: 0.95rem;
+            color: #1e293b;
+            word-break: break-all;
+            font-weight: 500;
+        }
+
+        .contact-item i {
+            width: 26px;
+            color: #2563eb;
+            font-size: 1.1rem;
+        }
+
+        .tags-cloud {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 4px;
+        }
+
+        .tag {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(2px);
+            padding: 5px 14px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #1e40af;
+            border: 0.5px solid rgba(59,130,246,0.3);
+            transition: all 0.2s;
+        }
+
+        .timeline {
+            margin-top: 6px;
+            position: relative;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-left: 24px;
+            margin-bottom: 22px;
+            border-left: 2px solid rgba(59, 130, 246, 0.5);
+        }
+
+        .timeline-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -6px;
+            top: 4px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #2563eb;
+            border: 2px solid white;
+            box-shadow: 0 0 0 2px rgba(59,130,246,0.4);
+        }
+
+        .timeline-date {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: #1e40af;
+            letter-spacing: 0.3px;
+            margin-bottom: 4px;
+            display: inline-block;
+            background: rgba(219, 234, 254, 0.7);
+            padding: 2px 10px;
+            border-radius: 30px;
+        }
+
+        .timeline-title {
+            font-weight: 800;
+            font-size: 0.92rem;
+            margin: 6px 0 4px;
+            color: #0f172a;
+        }
+
+        .timeline-desc {
+            font-size: 0.78rem;
+            color: #2d3a4e;
+            line-height: 1.45;
+        }
+
+        .dynamics-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 24px;
+            border-bottom: 2px solid rgba(100, 116, 139, 0.2);
+            padding-bottom: 12px;
+        }
+
+        .dynamics-header h2 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .dynamics-header i {
+            font-size: 1.6rem;
+            color: #2563eb;
+        }
+
+        .dynamics-list {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .dynamic-card {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(4px);
+            border-radius: 24px;
+            padding: 16px 22px;
+            transition: all 0.25s;
+            border: 1px solid rgba(255, 255, 255, 0.7);
+        }
+
+        .dynamic-card:hover {
+            transform: translateX(5px);
+            background: rgba(255, 255, 255, 0.85);
+            border-color: white;
+        }
+
+        .dynamic-content {
+            font-size: 0.96rem;
+            font-weight: 500;
+            color: #0f172a;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .dynamic-content i {
+            color: #3b82f6;
+            margin-top: 2px;
+            font-size: 1rem;
+        }
+
+        .dynamic-date {
+            font-size: 0.68rem;
+            color: #475569;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 8px;
+        }
+
+        /* ========= 横竖屏全面适配策略 ========= */
+        /* 1. 标准平板/手机竖屏 (宽度小于等于 980px) 左右堆叠 */
+        @media (max-width: 980px) {
+            body {
+                padding: 16px 20px;
+            }
+            .left-column, .right-column {
+                width: 100%;
+            }
+            .left-column {
+                padding: 12px 16px 8px 16px;
+            }
+            .right-column {
+                padding: 8px 16px 28px 16px;
+            }
+            .greeting {
+                font-size: 1.5rem;
+            }
+            .avatar {
+                width: 68px;
+                height: 68px;
+            }
+            .header {
+                padding: 18px 20px;
+            }
+        }
+
+        /* 2. 手机横屏且高度较小 (横屏模式，宽高比大，且高度 < 550px) 保持堆叠，紧凑布局 */
+        @media (orientation: landscape) and (max-height: 550px) {
+            body {
+                padding: 12px 20px;
+            }
+            .left-column .info-section {
+                padding: 12px 16px;
+                margin-bottom: 14px;
+            }
+            .right-column .dynamics-wrapper {
+                padding: 16px 18px;
+            }
+            .dynamics-list {
+                gap: 12px;
+            }
+            .dynamic-card {
+                padding: 12px 16px;
+            }
+            .timeline-item {
+                margin-bottom: 14px;
+                padding-left: 20px;
+            }
+            .timeline-title {
+                font-size: 0.85rem;
+            }
+            .timeline-desc {
+                font-size: 0.7rem;
+            }
+            .info-section h3 {
+                font-size: 1rem;
+                margin-bottom: 12px;
+            }
+            .contact-item {
+                font-size: 0.85rem;
+                margin-bottom: 10px;
+            }
+            .tag {
+                padding: 3px 10px;
+                font-size: 0.7rem;
+            }
+            .greeting {
+                font-size: 1.3rem;
+            }
+            .motto {
+                font-size: 0.8rem;
+            }
+            .social-links a {
+                padding: 3px 12px;
+                font-size: 0.8rem;
+            }
+            .dynamics-header h2 {
+                font-size: 1.3rem;
+            }
+        }
+
+        /* 3. 横屏且宽度介于 981px ~ 1200px 之间，保持左右比例，但缩小内边距提升体验 */
+        @media (min-width: 981px) and (max-width: 1300px) {
+            .left-column {
+                width: 28%;
+                padding: 24px 16px 28px 20px;
+            }
+            .right-column {
+                width: 72%;
+                padding: 24px 24px 28px 16px;
+            }
+            .info-section h3 {
+                font-size: 1.1rem;
+            }
+            .tag {
+                font-size: 0.75rem;
+                padding: 4px 12px;
+            }
+        }
+
+        /* 4. 极端小屏竖屏 (宽度 < 480px) 更紧凑 */
+        @media (max-width: 480px) {
+            .profile-info {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .greeting {
+                font-size: 1.3rem;
+            }
+            .header {
+                padding: 16px;
+            }
+            .left-column .info-section {
+                padding: 14px 16px;
+            }
+            .right-column .dynamics-wrapper {
+                padding: 18px;
+            }
+            .dynamic-card {
+                padding: 12px 14px;
+            }
+            .dynamic-content {
+                font-size: 0.88rem;
+            }
+            .timeline-title {
+                font-size: 0.85rem;
+            }
+            .social-links a {
+                padding: 4px 12px;
+                font-size: 0.75rem;
+            }
+        }
+
+        /* 5. 针对超宽屏或横屏大桌面保持原有优雅比例 */
+        @media (min-width: 1600px) {
+            .container {
+                max-width: 1500px;
+            }
+            .left-column {
+                padding: 32px 28px 36px 28px;
+            }
+            .right-column {
+                padding: 32px 36px 36px 28px;
+            }
+        }
+
+        /* 滚动条美观 */
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.3);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #94a3b8;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- 左上角头像 & 网名区域 -->
+    <header class="header">
+        <div class="profile-info">
+            <img class="avatar" id="avatarImg" alt="头像" src="https://i.bobopic.com/small/107989064.jpg">
+            <div class="profile-text">
+                <div class="greeting">
+                    Hello, I'm <span class="nickname" id="nicknameSpan"></span>
+                </div>
+                <div class="motto">
+                    <i class="fas fa-quote-left"></i>
+                    <span id="mottoText"></span>
+                </div>
+                <div class="social-links" id="socialLinks"></div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 2:8 左右核心区 -->
+    <div class="main-content">
+        <!-- 左侧区域：独立玻璃卡片块（联系·常驻、特长、爱好、工作经历） -->
+        <div class="left-column">
+            <!-- 邮箱 + 位置 -->
+            <div class="info-section">
+                <h3><i class="fas fa-address-card"></i> 联系 · 常驻</h3>
+                <div class="contact-item">
+                    <i class="fas fa-envelope"></i>
+                    <span id="emailInfo"></span>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span id="locationInfo"></span>
+                </div>
+            </div>
+
+            <!-- 特长领域 -->
+            <div class="info-section">
+                <h3><i class="fas fa-code"></i> 特长领域</h3>
+                <div class="tags-cloud" id="skillsContainer"></div>
+            </div>
+
+            <!-- 热爱生活 -->
+            <div class="info-section">
+                <h3><i class="fas fa-heart"></i> 热爱生活</h3>
+                <div class="tags-cloud" id="hobbiesContainer"></div>
+            </div>
+
+            <!-- 工作经历 时间竖轴 -->
+            <div class="info-section">
+                <h3><i class="fas fa-briefcase"></i> 工作经历</h3>
+                <div class="timeline" id="workTimeline"></div>
+            </div>
+        </div>
+
+        <!-- 右侧动态区域 玻璃卡片整体 -->
+        <div class="right-column">
+            <div class="dynamics-wrapper glass-card">
+                <div class="dynamics-header">
+                    <i class="fas fa-rss"></i>
+                    <h2>最新动态</h2>
+                </div>
+                <div class="dynamics-list" id="dynamicsList"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ============================================================
+    // 个人信息存储变量 (集中管理，修改即可全局更新)
+    // ============================================================
+    const userProfile = {
+        // 基础信息
+        avatarUrl: "https://i.bobopic.com/small/107989064.jpg",
+        nickname: "汞粗汽",
+        motto: "Tomorrow is another day.",
+        
+        // 社交链接
+        githubUrl: "https://github.com/alexchen",
+        bilibiliUrl: "https://m.bilibili.com/space/3546648630265893?from=search",
+        
+        // 联系信息
+        email: "3965778288@qq.com",
+        location: "地球",
+        
+        // 特长 (数组)
+        skills: ["魔方cube", "刷机", "root", "English"],
+        
+        // 爱好 (数组)
+        hobbies: ["音游", "魔方", "Windows", "术力口", "数字绘画"],
+        
+        // 工作经历 (时间竖轴)
+        workExperiences: [
+            {
+                period: "2026",
+                title: "个人网站",
+                description: "个人网站制作成功"
+            },
+        ],
+        
+        // 右侧动态
+        dynamics: [
+            { content: "喜欢郁鱼嵛", date: "2026-04-06" },
+
+        ]
+    };
+
+    // 辅助渲染函数
+    function renderPersonalInfo() {
+        // 头像
+        const avatarEl = document.getElementById('avatarImg');
+        if (avatarEl) {
+            avatarEl.src = userProfile.avatarUrl || 'https://via.placeholder.com/80?text=Avatar';
+            avatarEl.alt = `${userProfile.nickname}的头像`;
+            avatarEl.onerror = function() {
+                this.src = 'https://ui-avatars.com/api/?background=3b82f6&color=fff&bold=true&size=80&name=' + encodeURIComponent(userProfile.nickname.charAt(0));
+            };
+        }
+        
+        // 网名
+        const nicknameSpan = document.getElementById('nicknameSpan');
+        if (nicknameSpan) nicknameSpan.textContent = userProfile.nickname;
+        
+        // 座右铭
+        const mottoSpan = document.getElementById('mottoText');
+        if (mottoSpan) mottoSpan.textContent = userProfile.motto;
+        
+        // 社交链接
+        const socialContainer = document.getElementById('socialLinks');
+        if (socialContainer) {
+            socialContainer.innerHTML = `
+                <a href="${userProfile.githubUrl}" target="_blank" rel="noopener noreferrer" class="github-link">
+                    <i class="fab fa-github"></i> GitHub
+                </a>
+                <a href="${userProfile.bilibiliUrl}" target="_blank" rel="noopener noreferrer" class="bilibili-link">
+                    <i class="fab fa-bilibili"></i> Bilibili
+                </a>
+            `;
+        }
+        
+        // 邮箱 & 位置
+        const emailEl = document.getElementById('emailInfo');
+        if (emailEl) emailEl.textContent = userProfile.email;
+        const locationEl = document.getElementById('locationInfo');
+        if (locationEl) locationEl.textContent = userProfile.location;
+        
+        // 特长标签
+        const skillsContainer = document.getElementById('skillsContainer');
+        if (skillsContainer) {
+            skillsContainer.innerHTML = userProfile.skills.map(skill => `<span class="tag">${escapeHtml(skill)}</span>`).join('');
+        }
+        
+        // 爱好标签
+        const hobbiesContainer = document.getElementById('hobbiesContainer');
+        if (hobbiesContainer) {
+            hobbiesContainer.innerHTML = userProfile.hobbies.map(hobby => `<span class="tag">${escapeHtml(hobby)}</span>`).join('');
+        }
+        
+        // 工作经历时间轴
+        const timelineContainer = document.getElementById('workTimeline');
+        if (timelineContainer) {
+            if (userProfile.workExperiences && userProfile.workExperiences.length) {
+                timelineContainer.innerHTML = userProfile.workExperiences.map(exp => `
+                    <div class="timeline-item">
+                        <div class="timeline-date">${escapeHtml(exp.period)}</div>
+                        <div class="timeline-title">${escapeHtml(exp.title)}</div>
+                        <div class="timeline-desc">${escapeHtml(exp.description)}</div>
+                    </div>
+                `).join('');
+            } else {
+                timelineContainer.innerHTML = '<div style="font-size:0.85rem; padding:8px 0;">✨ 暂无工作经历数据～</div>';
+            }
+        }
+        
+        // 右侧动态
+        const dynamicsList = document.getElementById('dynamicsList');
+        if (dynamicsList) {
+            if (userProfile.dynamics && userProfile.dynamics.length) {
+                dynamicsList.innerHTML = userProfile.dynamics.map(dyn => `
+                    <div class="dynamic-card">
+                        <div class="dynamic-content">
+                            <i class="fas fa-pen-fancy"></i>
+                            <span>${escapeHtml(dyn.content)}</span>
+                        </div>
+                        <div class="dynamic-date">
+                            <i class="far fa-calendar-alt"></i> 
+                            <span>${escapeHtml(dyn.date)}</span>
+                        </div>
+                    </div>
+                `).join('');
+            } else {
+                dynamicsList.innerHTML = '<div class="dynamic-card" style="text-align:center;">🌟 暂无动态，敬请期待～</div>';
+            }
+        }
+    }
+    
+    // 简单防XSS
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+    
+    // 初始化渲染
+    renderPersonalInfo();
+    
+    // 暴露全局方便调试与修改
+    window.userProfile = userProfile;
+    window.refreshProfile = function() {
+        renderPersonalInfo();
+        console.log('✨ 个人主页已根据最新变量刷新，完美适配横竖屏');
+    };
+    
+    // 监听横竖屏变化，重新触发一次平滑重绘（某些情况下不需要重绘，但保留回调保证万一）
+    window.addEventListener('resize', () => {
+        // 可选：针对极端尺寸微调无侵入，也可不做额外动作，但为了确保背景自适应完美
+        if (window.innerWidth < 500 && window.innerHeight < 400) {
+            // 极窄场景，不做额外动作，css已处理
+        }
+    });
+    
+    
+</script>
+</body>
+</html>
